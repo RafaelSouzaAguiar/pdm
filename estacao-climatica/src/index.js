@@ -49,6 +49,29 @@ class App extends React.Component{
         return sul ? 'Outono' : 'Primavera'
     }
 
+    obterLocalizacao = () => {
+        window.navigator.geolocation.getCurrentPosition(
+        //caso a solicitação tenha sido obtida com sucesso 
+        (posicao) => {
+            const dataAtual = new Date()
+            const estacaoClimatica = this.obterEstacao(dataAtual, posicao.coords.latitude)
+            const icone = this.icones[estacaoClimatica]
+            this.setState({
+                latitude: posicao.coords.latitude,
+                longitude: posicao.coords.longitude,
+                estacao: estacaoClimatica,
+                icone: icone,
+                data: dataAtual
+            })
+        
+        },
+        //caso contrario (usuario negou, por exemplo)
+        (erro) => {
+
+        }
+        )
+    }
+
     render(){
         return <div>
             Oi
