@@ -51,24 +51,25 @@ class App extends React.Component{
 
     obterLocalizacao = () => {
         window.navigator.geolocation.getCurrentPosition(
-        //caso a solicitação tenha sido obtida com sucesso 
-        (posicao) => {
-            const dataAtual = new Date()
-            const estacaoClimatica = this.obterEstacao(dataAtual, posicao.coords.latitude)
-            const icone = this.icones[estacaoClimatica]
-            this.setState({
-                latitude: posicao.coords.latitude,
-                longitude: posicao.coords.longitude,
-                estacao: estacaoClimatica,
-                icone: icone,
-                data: dataAtual
-            })
-        
-        },
-        //caso contrario (usuario negou, por exemplo)
-        (erro) => {
-
-        }
+            //caso a solicitação tenha sido obtida com sucesso 
+            (posicao) => {
+                const dataAtual = new Date()
+                const estacaoClimatica = this.obterEstacao(dataAtual, posicao.coords.latitude)
+                const icone = this.icones[estacaoClimatica]
+                this.setState({
+                    latitude: posicao.coords.latitude,
+                    longitude: posicao.coords.longitude,
+                    estacao: estacaoClimatica,
+                    icone: icone,
+                    data: dataAtual,
+                    mensagemDeErro: null
+                })
+            
+            },
+            //caso contrario (usuario negou, por exemplo)
+            (erro) => {
+                this.setState({mensagemDeErro: 'Tente novamente mais tarde'})
+            }
         )
     }
 
@@ -92,7 +93,9 @@ class App extends React.Component{
                                         this.state.latitude ?
                                             `Cordenadas: ${this.state.latitude, this.state.logitude}.
                                             Data: ${this.state.data}` :
-                                            `Clique no botão para saber a sua estacção climática`
+                                        this.state.mensagemDeErro ?
+                                            `${this.state.mensagemDeErro}` :
+                                            `Clique no botão para saber a sua estação climática`
                                         }
                                     </p>
                                 </div>
