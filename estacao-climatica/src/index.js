@@ -8,18 +8,15 @@ class App extends React.Component{
     //     console.log(position)
     // })
 
-    constructor(props){
-        super(props)
-        this.state = {
-            latitude: null,
-            longitude: null,
-            estacao: null,
-            data: null,
-            icone: null
-        }
-        console.log('construtor')
+    state = {
+        latitude: null,
+        longitude: null,
+        estacao: null,
+        data: null,
+        icone: null,
+        mensagemDeErro: null
     }
-
+    
     componentDidMount(){
         console.log('componentDidMount')
         this.obterLocalizacao()
