@@ -116,6 +116,13 @@ class App extends React.Component{
                                 onClick={() => this.obterLocalizacao()}>
                                     Qual a minha estação?
                                 </button>
+                                <button
+                                    className='btn btn-outline-danger w-100 mt-2'
+                                    onClick={() => {
+                                        ReactDOM.unmountComponentAtNode(document.querySelector('#root'))
+                                    }}>
+                                    Desmontar! Cuidado!
+                                </button>
                             </div>
                         </div>
                     </div>
