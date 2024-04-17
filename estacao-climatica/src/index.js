@@ -17,6 +17,18 @@ class App extends React.Component{
             data: null,
             icone: null
         }
+        console.log('construtor')
+    }
+
+    componentDidMount(){
+        console.log('componentDidMount')
+        this.obterLocalizacao()
+    }
+    componentDidUpdate(){
+        console.log('componentDidUpdate')
+    }
+    componentWillUnmount(){
+        console.log('componentWillUnmount')
     }
 
     icones = {
@@ -74,6 +86,7 @@ class App extends React.Component{
     }
 
     render(){
+        console.log('render')
         return <div>
             <div className="container mt-2">
                 <div className="row justify-content-center">
