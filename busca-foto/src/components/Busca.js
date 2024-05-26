@@ -7,7 +7,7 @@ import { Button } from 'primereact/button'
 export default class Busca extends Component {
 
     state = {
-        termoDebusca: ''
+        termoDeBusca: ''
     }
 
     onTermoAlterado = (event) => {
@@ -17,6 +17,7 @@ export default class Busca extends Component {
 
     onFormSubmit = (event) => {
         event.preventDefault()
+        this.props.onBuscaRealizada(this.state.termoDeBusca)
     }
 
     render() {
@@ -29,7 +30,7 @@ export default class Busca extends Component {
                             <InputIcon
                                 className="pi pi-search" />
                             <InputText
-                                value={this.state.termoDebusca}
+                                value={this.state.termoDeBusca}
                                 className='w-full h-full'
                                 placeholder={this.props.dica}
                                 onChange={this.onTermoAlterado}
