@@ -1,0 +1,21 @@
+{
+  "name": "busca-foto-backend",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "start:dev": "ts-node src/app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "undici-types": "^5.26.5"
+  },
+  "description": ""
+}
