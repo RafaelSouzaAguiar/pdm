@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { 
+import {
   Alert,
   FlatList,
   Pressable,
@@ -13,71 +13,66 @@ import IconesRedesSociais from './IconesRedesSociais';
 import IconesEdicaoRemocao from './IconesEdicaoRemocao';
 
 interface Lembrete {
-  id: string;
+  id?: string;
   texto: string;
 }
 
 export default function App() {
-  const [lembrete, setLembrete] = useState <string>('')
+  const [lembrete, setLembrete] = useState<Lembrete | null>(null)
   const [lembretes, setLembretes] = useState<Lembrete[]>([])
+  const [emModoDeEdicao, setModoDeEdicao] = useState<boolean>(false)
 
-  const atualizar = (id: string) => {
-
+  const atualizar = () => {
+    setLembretes(LembretesAtuais => (
+      LembretesAtuais.map(l => (
+        l.id === lembrete!.id ? lembrete! : l
+      ))
+    ))
+    setLembrete({texto: ''})
+    setModoDeEdicao(false)
   }
 
   const remover = (id: string) => {
-    Alert.alert(
-      'Remover lembrete',
-      `Deseja remover esse lembrete: ${lembretes.find(l => l.id === id)?.texto}`,
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel'
-        },
-        {
-          text: 'Remover',
-          style: 'destructive',
-          onPress: () => {
-            setLembretes(lembretesAtuais => lembretesAtuais.filter(l => l.id !== id))
-            ToastAndroid.show(
-              'Lembrete rmovido com sucesso',
-              ToastAndroid.LONG
-            )
-          }
-        }
-      ]
-    )
-
+    setLembretes(lembretesAtuais => lembretesAtuais.filter(l => l.id !== id))
   }
 
   const adicionar = () => {
-    const novoLembrete: Lembrete = {
-      id: Date.now().toString(),
-      texto: lembrete
+    if(lembrete === null || lembrete.texto === ''){
+      alert('Lembrete não pode ser vazio')
+    }
+    else{
+      const novoLembrete: Lembrete = {
+        id: Date.now().toString(),
+        texto: lembrete!.texto
+      }
+  
+      setLembretes(lembretesAtual => [
+        novoLembrete,
+        ...lembretesAtual
+      ])
     }
 
-    setLembretes(lembretesAtual => [
-      novoLembrete,
-      ...lembretesAtual
-    ])
-
-    setLembrete('')
+    setLembrete({texto: ''})
   }
+
   return (
     <View style={styles.container}>
-      <TextInput 
+      <TextInput
         style={styles.input}
         placeholder='Digite um lembrete...'
-        onChangeText={setLembrete}
-        value={lembrete}
+        onChangeText={(LembreteDigitado) => setLembrete({id: lembrete?.id, texto: LembreteDigitado})}
+        value={lembrete?.texto}
       />
-      <Pressable 
-        style={styles.pressable} 
-        onPress={adicionar}>
-        <Text style={styles.pressableText}>Salvar Lembrete</Text>
+      <Pressable
+        style={styles.pressable}
+        onPress={emModoDeEdicao ? atualizar : adicionar}>
+        <Text style={styles.pressableText}>
+          {`${emModoDeEdicao ? 'Atualizar' : 'Salvar'} lembrete`}
+        </Text>
       </Pressable>
       <FlatList
-      style={styles.list}
+        style={styles.list}
+        keyExtractor={item => item.id!}
         data={lembretes}
         renderItem={lembrete => (
           <View
@@ -87,9 +82,12 @@ export default function App() {
             </Text>
             <View
               style={styles.listItemButtons}>
-              <IconesEdicaoRemocao 
-                remover={()  => remover(lembrete.item.id)} 
-                atualizar={() => atualizar(lembrete.item.id)}/>
+              <IconesEdicaoRemocao
+                remover={() => remover(lembrete.item.id!)}
+                atualizar={() => {
+                  setLembrete(lembrete.item)
+                  setModoDeEdicao(true)
+                }} />
             </View>
           </View>
         )}
@@ -97,7 +95,7 @@ export default function App() {
 
       <IconesRedesSociais />
     </View>
-    
+
   );
 }
 
@@ -109,7 +107,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 40
   },
-  input:{
+  input: {
     width: '80%',
     borderColor: 'gray',
     borderWidth: 1,
@@ -118,14 +116,14 @@ const styles = StyleSheet.create({
     padding: 8,
     textAlign: 'center'
   },
-  pressable:{
+  pressable: {
     backgroundColor: 'blue',
     width: '80%',
     padding: 8,
     borderRadius: 4,
     marginBottom: 4
   },
-  pressableText:{
+  pressableText: {
     color: 'white',
     textAlign: 'center'
   },
@@ -146,11 +144,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  listItemText:{
+  listItemText: {
     textAlign: 'center',
     width: '70%'
   },
-  listItemButtons:{
+  listItemButtons: {
     width: '30%'
   }
 });
